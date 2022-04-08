@@ -1,9 +1,11 @@
-import { Col, Row, Form, Input } from "antd";
+import { Col, Row, Form, Input, Select } from "antd";
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../components/DefaultLayout";
 import Spinner from "../components/Spinner";
 import { addCar, editCar, getAllCars } from "../redux/actions/carsActions";
+const { Option } = Select;
 function EditCar({ match }) {
   const { cars } = useSelector((state) => state.carsReducer);
   const dispatch = useDispatch();
@@ -20,8 +22,11 @@ function EditCar({ match }) {
     }
   }, [cars]);
 
+  const [city, setcity] = React.useState("");
+
   function onFinish(values) {
     values._id = car._id;
+    values.city = city;
 
     dispatch(editCar(values));
     console.log(values);
@@ -31,7 +36,7 @@ function EditCar({ match }) {
     <DefaultLayout>
       {loading && <Spinner />}
       <Row justify="center mt-5">
-        <Col lg={12} sm={24} xs={24} className='p-2'>
+        <Col lg={12} sm={24} xs={24} className="p-2">
           {totalcars.length > 0 && (
             <Form
               initialValues={car}
@@ -76,6 +81,23 @@ function EditCar({ match }) {
                 rules={[{ required: true }]}
               >
                 <Input />
+              </Form.Item>
+
+              <Form.Item label="city">
+                <Select
+                  onChange={(value) => {
+                    // alert(value);
+                    setcity(value);
+                  }}
+                  name="city"
+                  placeholder="Please select a city"
+                >
+                  <Option value="Scarborough">Scarborough</Option>
+                  <Option value="Toronto">Toronto</Option>
+                  <Option value="Brampton">Brampton</Option>
+                  <Option value="london">london</Option>
+                  <Option value="ottawa">ottawa</Option>
+                </Select>
               </Form.Item>
 
               <div className="text-right">

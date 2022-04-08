@@ -16,7 +16,9 @@ function AdminHome() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllCars());
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    dispatch(getAllCars(user._id));
   }, []);
 
   useEffect(() => {
@@ -61,8 +63,9 @@ function AdminHome() {
 
                     <Popconfirm
                       title="Are you sure to delete this car?"
-                      onConfirm={()=>{dispatch(deleteCar({carid : car._id}))}}
-                      
+                      onConfirm={() => {
+                        dispatch(deleteCar({ carid: car._id }));
+                      }}
                       okText="Yes"
                       cancelText="No"
                     >

@@ -2,9 +2,14 @@ const express = require("express");
 const router = express.Router();
 const Car = require("../models/carModel");
 
-router.get("/getallcars", async (req, res) => {
+router.get("/getallcars/:id", async (req, res) => {
   try {
-    const cars = await Car.find();
+    let cars;
+    if (req.params.id == "all") {
+      cars = await Car.find();
+    } else {
+      cars = await Car.find({ createdBy: req.params.id });
+    }
     res.send(cars);
   } catch (error) {
     return res.status(400).json(error);
@@ -29,6 +34,7 @@ router.post("/editcar", async (req, res) => {
     car.fuelType = req.body.fuelType;
     car.rentPerHour = req.body.rentPerHour;
     car.capacity = req.body.capacity;
+    car.city = req.body.city;
 
     await car.save();
 
